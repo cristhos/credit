@@ -1,0 +1,15 @@
+body{
+	margin-top: 10%;
+}
+
+.navbar-inverse {
+    background: #8b0e12;
+}
+.panel-primary .panel-heading
+{
+	background: #8b0e12;
+}
+}
+.panel-primary {
+    border-color: #8b0e12;
+}
