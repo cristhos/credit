@@ -11,22 +11,24 @@ if(isset($_POST['num_tel']) AND isset($_POST['nom_complet']) AND isset($_POST['m
 	 		$nom_complet = $_POST['nom_complet'];
 	 		$mot_de_passe = $_POST['mdp'];
 
-	        //deux personne ne peuvent pas s'enregistrer avec le meme numero
-	 		$insert="INSERT INTO abonnees(numero_telephone, nom_complet, mot_de_passe) VALUES('$num', '$nom_complet', '$mot_de_passe')";
-                      
+            $insert = $bd->prepare('INSERT INTO abonnees VALUES (?,?,?,?) ');
+	        $insert->execute(array($num, $nom_complet, $mot_de_passe,'20'));          
 
-			$rq=mysql_query($insert);
-			if ($rq)
-			{
-				session_start();
-				$_SESSION['numero'] = $num;
-				$_SESSION['nom_complet'] = $nom_complet;
-				header('location: mon_compte.php');
+	        $rep = $bd->prepare('SELECT * FROM abonnees WHERE numero_telephone = ? AND  mot_de_passe = ? ');
+	    	$rep->execute(array($num, $mot_de_passe));
+
+		    session_start();
+
+			while ($donnees = $rep->fetch())
+			{	
+			      $_SESSION['numero'] = $donnees['numero_telephone']; 
+			      $_SESSION['nom_complet'] = $donnees['nom_complet'];
+			      $_SESSION['solde'] = $donnees['credit'];
 			}
-			else 
-			{
-				header('location: enregistrer.php?reussite=0');
-			}
+
+	        header('location: mon_compte.php');
+		
+       
 		}
 		else
 		{
@@ -36,6 +38,14 @@ if(isset($_POST['num_tel']) AND isset($_POST['nom_complet']) AND isset($_POST['m
 else
 {    
 	header('location: enregistrer.php?form=1');
+}
+
+
+function creditGeneraror()
+{
+	    $v = 50;
+		$insert = $bd->prepare('INSERT INTO credit VALUES (?,?) ');
+	    $insert->execute(array(rand(10000,90000).''.rand(10000,90000).''.rand(10000,90000),$v));
 }
 
 ?>

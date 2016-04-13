@@ -16,6 +16,7 @@
         					
 		        			<div class="panel-body">
 		        				<h1 class="text-center">Mon status</h1>
+                                <p class="lead">Solde : <?php  echo $_SESSION['solde'];  ?></p>
 		        			</div>
 		        			<div class="panel panel-footer">
         						<h3 class="panel-title">Tel : <?php echo $_SESSION['numero']; ?></h3>
